@@ -1,3 +1,4 @@
+from abc import abstractmethod, ABC
 from dataclasses import dataclass
 from datetime import datetime
 from typing import List
@@ -12,10 +13,12 @@ class ParsedAccommodation:
     provider: str
 
 
-class AccommodationScrapper:
+class AccommodationScrapper(ABC):
+    @abstractmethod
     def next_page(self):
         pass
 
+    @abstractmethod
     def read_from_page(self) -> List[ParsedAccommodation]:
         pass
 

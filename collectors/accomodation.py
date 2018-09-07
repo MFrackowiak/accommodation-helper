@@ -16,7 +16,7 @@ class AccommodationCollector:
             last_from_provider, limit, entered)
 
         for i, scrapped in enumerate(accomodation_generator(self.scrapper)):
-            # do something with scrapped
+            # TODO do something with scrapped
             if stop_func(i, scrapped):
                 break
 

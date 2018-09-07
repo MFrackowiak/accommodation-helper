@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List
+from typing import List, Optional
 
 from models.property import AdvertisedProperty
 
@@ -14,7 +14,7 @@ class AdvertisedPropertyIRepository(ABC):
         pass
 
     @abstractmethod
-    def get(self, property_id: int) -> AdvertisedProperty:
+    def get(self, property_id: int) -> Optional[AdvertisedProperty]:
         pass
 
     @abstractmethod
@@ -22,9 +22,17 @@ class AdvertisedPropertyIRepository(ABC):
         pass
 
     @abstractmethod
-    def list_mail_sent(self) -> List[AdvertisedProperty]:
+    def list_all(self) -> List[AdvertisedProperty]:
         pass
 
     @abstractmethod
-    def list_all(self) -> List[AdvertisedProperty]:
+    def delete_all(self):
+        pass
+
+    @abstractmethod
+    def get_last_from(self, provider) -> Optional[AdvertisedProperty]:
+        pass
+
+    @abstractmethod
+    def list_ok(self) -> List[AdvertisedProperty]:
         pass

@@ -1,15 +1,18 @@
+from dataclasses import field, dataclass
+from datetime import datetime
 from typing import Optional
 
 
+@dataclass
 class AdvertisedProperty:
-    def __init__(self, url: str, address: str, price: int, provided_by: str,
-                 row: Optional[int]=None, commute: int=0, flagged: bool = False,
-                 sent_email: bool=False):
-        self.row = row
-        self.url = url
-        self.address = address
-        self.price = price
-        self.commute = commute
-        self.flagged = flagged
-        self.sent_email = sent_email
-        self.provided_by = provided_by
+    url: str
+    address: str
+    price: int
+    provided_by: str
+    entered: datetime
+    ok: bool
+    property_id: Optional[int] = field(default=None)
+    row: Optional[int] = field(default=None)
+    commute: int = field(default=0)
+    flagged: bool = field(default=False)
+    sent_email: bool = field(default=False)
