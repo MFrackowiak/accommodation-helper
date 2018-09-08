@@ -8,6 +8,7 @@ class AcceptorResponse(Enum):
     REJECT = 1
     VERIFY = 2
     ACCEPT = 3
+    DUPLICATE = 4
 
 
 class Acceptor(ABC):

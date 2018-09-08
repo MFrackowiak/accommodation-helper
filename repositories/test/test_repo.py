@@ -90,6 +90,8 @@ def create_advertised_5():
 
 
 class TestRepository(object):
+    threshold = 0.5
+
     def test_property_to_dict(self):
         property_dict = self.repo._property_to_dict(create_advertised_1())
         expected_dict = deepcopy(advertised_1_dict)
@@ -157,3 +159,34 @@ class TestRepository(object):
         self.assertEqual(self.repo.get_last_from('let'), self.default[3])
         self.assertEqual(self.repo.get_last_from('rent'), self.default[2])
         self.assertEqual(self.repo.get_last_from('daft'), self.default[5])
+
+    def test_list_with_url(self):
+        self._save_all()
+
+        self.assertEqual(
+            self.repo.list_with_url('http://somewhere.nice.location'),
+            [self.default[1], self.default[4], self.default[5]]
+        )
+        self.assertEqual(
+            self.repo.list_with_url('http://somewhere.nowhere'),
+            [self.default[3]]
+        )
+        self.assertEqual(
+            self.repo.list_with_url('https://somewhere.nowhere'), []
+        )
+
+    def test_list_similar(self):
+        self._save_all()
+
+        self.assertEqual(
+            self.repo.list_with_similar_address('Nice Location'),
+            [self.default[1], self.default[4]]
+        )
+        self.assertEqual(
+            self.repo.list_with_similar_address('Sandyford'),
+            [self.default[2]]
+        )
+        self.assertEqual(
+            self.repo.list_with_similar_address('Ehhg', 0.5),
+            []
+        )

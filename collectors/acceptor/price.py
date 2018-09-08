@@ -14,6 +14,13 @@ class PriceCheckConfig:
 
 
 class PriceCheckAcceptor(Acceptor):
+    def __init__(self, config: Optional[PriceCheckConfig] = None,
+                 **kwargs):
+        self.config = config or PriceCheckConfig(**kwargs)
+
+        if not any(filter(lambda c: c is not None, astuple(config))):
+            raise ValueError('Improperly configured!')
+
     def is_ok(self, found_property: ParsedAccommodation) -> AcceptorResponse:
         if self._in_range(found_property.price, self.config.accept_min,
                           self.config.accept_max):
@@ -29,9 +36,3 @@ class PriceCheckAcceptor(Acceptor):
             return False
         return (min_val is None or value >= min_val) and \
                (max_val is None or value <= max_val)
-
-    def __init__(self, config: PriceCheckConfig):
-        self.config = config
-
-        if not any(filter(lambda c: c is not None, astuple(config))):
-            raise ValueError('Improperly configured!')

@@ -55,3 +55,17 @@ class InMemoryAdvertisedPropertyRepository(AdvertisedPropertyIRepository):
     def list_ok(self):
         return list(map(lambda d: AdvertisedProperty(**d),
                         filter(lambda d: d['ok'], self._repo.values())))
+
+    def list_with_url(self, url: str) -> List[AdvertisedProperty]:
+        return list(map(lambda d: AdvertisedProperty(**d),
+                        filter(lambda d: d['url'] == url, self._repo.values())))
+
+    def list_with_similar_address(
+            self, address: str, similarity_threshold: float = 0.5
+    ) -> List[AdvertisedProperty]:
+        # TODO proper distance
+        address = address.lower()
+        return list(
+            map(lambda d: AdvertisedProperty(**d),
+                filter(lambda d: address in d['address'].lower(),
+                       self._repo.values())))

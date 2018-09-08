@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from dataclasses import field, dataclass
+from typing import Optional
 
 
 @dataclass
@@ -12,5 +13,5 @@ class CommuteRequest:
 
 class CommuteAPI(ABC):
     @abstractmethod
-    def check_commute_time(self, request: CommuteRequest) -> int:
+    def check_commute_time(self, request: CommuteRequest) -> Optional[int]:
         pass

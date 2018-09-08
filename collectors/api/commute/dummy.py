@@ -1,8 +1,10 @@
+from typing import Optional
+
 from collectors.api.commute.base import CommuteRequest, CommuteAPI
 
 
 class DummyCommuteAPI(CommuteAPI):
-    def check_commute_time(self, request: CommuteRequest) -> int:
+    def check_commute_time(self, request: CommuteRequest) -> Optional[int]:
         from_address = request.from_address.lower()
         if 'nice' in from_address:
             return 50
@@ -12,4 +14,4 @@ class DummyCommuteAPI(CommuteAPI):
             return 20
         elif 'close' in from_address:
             return 10
-        return 0
+        return None

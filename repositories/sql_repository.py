@@ -33,7 +33,7 @@ def _in_session(func) -> Callable:
     return session_wrapper
 
 
-class SqliteAdvertisedPropertyRepository(AdvertisedPropertyIRepository):
+class SqlAdvertisedPropertyRepository(AdvertisedPropertyIRepository):
     def __init__(self, db_name, auto_commit=True):
         self.db_name = db_name
         self.auto_commit = auto_commit
@@ -138,7 +138,21 @@ class SqliteAdvertisedPropertyRepository(AdvertisedPropertyIRepository):
         select = self.properties.select(self.properties.c.ok == True)
         result = self.session.execute(select)
         return [self._row_to_obj(row) for row in result.fetchall()]
-        pass
+
+    @_in_session
+    def list_with_url(self, url: str) -> List[AdvertisedProperty]:
+        select = self.properties.select(self.properties.c.url == url)
+        result = self.session.execute(select)
+        return [self._row_to_obj(row) for row in result.fetchall()]
+
+    @_in_session
+    def list_with_similar_address(
+            self, address: str, similarity_threshold: float=0.5
+    )-> List[AdvertisedProperty]:
+        select = self.properties.select(
+            self.properties.c.address.ilike(f'%{address}%'))
+        result = self.session.execute(select)
+        return [self._row_to_obj(row) for row in result.fetchall()]
 
     def init_session(self):
         self.session = self.session_maker()

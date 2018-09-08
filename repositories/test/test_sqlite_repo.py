@@ -3,12 +3,12 @@ from unittest import TestCase
 
 from repositories.test.test_repo import TestRepository, create_advertised_1, \
     advertised_1_dict
-from repositories.sqlite_repository import SqliteAdvertisedPropertyRepository
+from repositories.sql_repository import SqlAdvertisedPropertyRepository
 
 
 class TestSqliteRepository(TestRepository, TestCase):
     def setUp(self):
-        self.repo = SqliteAdvertisedPropertyRepository('test-db.db', False)
+        self.repo = SqlAdvertisedPropertyRepository('test-db.db', False)
         self.default = {}
 
     def tearDown(self):

@@ -36,3 +36,13 @@ class AdvertisedPropertyIRepository(ABC):
     @abstractmethod
     def list_ok(self) -> List[AdvertisedProperty]:
         pass
+
+    @abstractmethod
+    def list_with_url(self, url: str) -> List[AdvertisedProperty]:
+        pass
+
+    @abstractmethod
+    def list_with_similar_address(
+            self, address: str, similarity_threshold: float=0.5
+    )-> List[AdvertisedProperty]:
+        pass

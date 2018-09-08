@@ -1,18 +1,14 @@
-from dataclasses import field, dataclass
 from datetime import datetime
 from unittest import TestCase
 
 from collectors.acceptor.base import AcceptorResponse
 from collectors.acceptor.price import PriceCheckAcceptor, PriceCheckConfig
+from collectors.scrapper import ParsedAccommodation
 
 
-@dataclass
-class MockedProperty:
-    price: int
-    provider: str = field(default='')
-    url: str = field(default='')
-    address: str = field(default='')
-    entered: datetime = field(default=datetime.now())
+def mock_accommodation(price: int) -> ParsedAccommodation:
+    return ParsedAccommodation('dummy.url', 'somewhere', datetime.now(),
+                               price, 'test')
 
 
 class PriceAcceptorTestCase(TestCase):
@@ -23,19 +19,19 @@ class PriceAcceptorTestCase(TestCase):
     def test_in_accept(self):
         acceptor = PriceCheckAcceptor(PriceCheckConfig(accept_min=0,
                                                        accept_max=10))
-        self.assertEqual(acceptor.is_ok(MockedProperty(5)),
+        self.assertEqual(acceptor.is_ok(mock_accommodation(5)),
                          AcceptorResponse.ACCEPT)
-        self.assertEqual(acceptor.is_ok(MockedProperty(0)),
+        self.assertEqual(acceptor.is_ok(mock_accommodation(0)),
                          AcceptorResponse.ACCEPT)
-        self.assertEqual(acceptor.is_ok(MockedProperty(10)),
+        self.assertEqual(acceptor.is_ok(mock_accommodation(10)),
                          AcceptorResponse.ACCEPT)
 
     def test_not_in_accept(self):
         acceptor = PriceCheckAcceptor(PriceCheckConfig(accept_min=0,
                                                        accept_max=2))
-        self.assertEqual(acceptor.is_ok(MockedProperty(-1)),
+        self.assertEqual(acceptor.is_ok(mock_accommodation(-1)),
                          AcceptorResponse.REJECT)
-        self.assertEqual(acceptor.is_ok(MockedProperty(3)),
+        self.assertEqual(acceptor.is_ok(mock_accommodation(3)),
                          AcceptorResponse.REJECT)
 
     def test_in_accept_and_verify(self):
@@ -43,17 +39,17 @@ class PriceAcceptorTestCase(TestCase):
             PriceCheckConfig(accept_min=0, accept_max=10,
                              verify_min=-5, verify_max=15))
 
-        self.assertEqual(acceptor.is_ok(MockedProperty(5)),
+        self.assertEqual(acceptor.is_ok(mock_accommodation(5)),
                          AcceptorResponse.ACCEPT)
-        self.assertEqual(acceptor.is_ok(MockedProperty(0)),
+        self.assertEqual(acceptor.is_ok(mock_accommodation(0)),
                          AcceptorResponse.ACCEPT)
-        self.assertEqual(acceptor.is_ok(MockedProperty(10)),
+        self.assertEqual(acceptor.is_ok(mock_accommodation(10)),
                          AcceptorResponse.ACCEPT)
-        self.assertEqual(acceptor.is_ok(MockedProperty(-5)),
+        self.assertEqual(acceptor.is_ok(mock_accommodation(-5)),
                          AcceptorResponse.VERIFY)
-        self.assertEqual(acceptor.is_ok(MockedProperty(11)),
+        self.assertEqual(acceptor.is_ok(mock_accommodation(11)),
                          AcceptorResponse.VERIFY)
-        self.assertEqual(acceptor.is_ok(MockedProperty(15)),
+        self.assertEqual(acceptor.is_ok(mock_accommodation(15)),
                          AcceptorResponse.VERIFY)
 
     def test_out_of_verify(self):
@@ -61,7 +57,7 @@ class PriceAcceptorTestCase(TestCase):
             PriceCheckConfig(accept_min=0, accept_max=10,
                              verify_min=-5, verify_max=15))
 
-        self.assertEqual(acceptor.is_ok(MockedProperty(-6)),
+        self.assertEqual(acceptor.is_ok(mock_accommodation(-6)),
                          AcceptorResponse.REJECT)
-        self.assertEqual(acceptor.is_ok(MockedProperty(16)),
+        self.assertEqual(acceptor.is_ok(mock_accommodation(16)),
                          AcceptorResponse.REJECT)
