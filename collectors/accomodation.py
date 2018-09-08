@@ -26,6 +26,7 @@ class AccommodationCollector:
         if not any([last_from_provider, limit, entered]):
             raise ValueError('At least one condition is required!')
 
+
         conditions = []
 
         if last_from_provider:
