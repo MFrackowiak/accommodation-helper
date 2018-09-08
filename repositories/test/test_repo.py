@@ -105,20 +105,20 @@ class TestRepository(object):
     def test_property_get(self):
         advertised_1 = create_advertised_1()
         self.repo.save(advertised_1)
-        retrieved_1 = self.repo.get(1)
+        retrieved_1 = self.repo.get(advertised_1.property_id)
 
         self.assertEqual(advertised_1, retrieved_1)
 
     def test_property_update(self):
         advertised_1 = create_advertised_1()
         self.repo.save(advertised_1)
-        retrieved_1 = self.repo.get(1)
+        retrieved_1 = self.repo.get(advertised_1.property_id)
 
         advertised_1.url = 'nothing'
         self.assertNotEqual(advertised_1, retrieved_1)
 
         self.repo.update(advertised_1)
-        retrieved_1 = self.repo.get(1)
+        retrieved_1 = self.repo.get(advertised_1.property_id)
         self.assertEqual(advertised_1, retrieved_1)
 
     def _save_all(self):
