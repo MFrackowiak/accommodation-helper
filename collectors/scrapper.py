@@ -1,5 +1,5 @@
 from abc import abstractmethod, ABC
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 from typing import List
 
@@ -11,6 +11,7 @@ class ParsedAccommodation:
     entered: datetime
     price: int
     provider: str
+    description: str = field(default='')
 
 
 class AccommodationScrapper(ABC):
