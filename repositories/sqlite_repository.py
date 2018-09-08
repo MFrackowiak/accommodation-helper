@@ -6,10 +6,31 @@ from sqlalchemy import DateTime, String, Integer, Column, Table, MetaData, \
     Boolean
 from sqlalchemy.engine import create_engine
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy_utils import database_exists, create_database
 
 from models.property import AdvertisedProperty
 from repositories.property import AdvertisedPropertyIRepository
+
+
+def _in_session(func) -> Callable:
+    @wraps(func)
+    def session_wrapper(self, *args, **kwargs):
+        if self.session is None:
+            self.init_session()
+        try:
+            result = func(self, *args, **kwargs)
+            if self.auto_commit:
+                self.commit()
+            else:
+                self.flush()
+            return result
+        except:
+            self.rollback()
+            raise
+        finally:
+            if self.auto_commit:
+                self.finalize_session()
+
+    return session_wrapper
 
 
 class SqliteAdvertisedPropertyRepository(AdvertisedPropertyIRepository):
@@ -43,6 +64,9 @@ class SqliteAdvertisedPropertyRepository(AdvertisedPropertyIRepository):
             Column('flagged', Boolean, default=False),
             Column('sent_email', Boolean, default=False),
             sqlite_autoincrement=True)
+        self.properties_columns = [
+            column.name for column in self.properties.c
+        ]
 
         metadata.create_all(self.engine)
 
@@ -51,6 +75,12 @@ class SqliteAdvertisedPropertyRepository(AdvertisedPropertyIRepository):
         as_dict.pop('property_id', None)
         return as_dict
 
+    def _row_to_obj(self, row: tuple) -> AdvertisedProperty:
+        return AdvertisedProperty(
+            **dict(zip(self.properties_columns, row))
+        )
+
+    @_in_session
     def save(self, advertised_property: AdvertisedProperty):
         insert = self.properties.insert().values(
             **self._property_to_dict(advertised_property),
@@ -58,35 +88,56 @@ class SqliteAdvertisedPropertyRepository(AdvertisedPropertyIRepository):
         result = self.session.execute(insert)
         advertised_property.property_id = result.inserted_primary_key[0]
 
+    @_in_session
     def update(self, advertised_property: AdvertisedProperty):
-        pass
+        update = self.properties.update(
+            self.properties.c.property_id == advertised_property.property_id
+        ).values(
+            **self._property_to_dict(advertised_property)
+        )
+        self.session.execute(update)
 
+    @_in_session
     def get(self, property_id: int) -> Optional[AdvertisedProperty]:
         select = self.properties.select(
             self.properties.c.property_id == property_id)
         result = self.session.execute(select)
         if result.rowcount == 0:
             return None
-        return result.fetchone()
+        return self._row_to_obj(result.fetchone())
 
+    @_in_session
     def list_flagged(self) -> List[AdvertisedProperty]:
-        pass
+        select = self.properties.select(self.properties.c.flagged == True)
+        result = self.session.execute(select)
+        return [self._row_to_obj(row) for row in result.fetchall()]
 
-    def list_mail_sent(self) -> List[AdvertisedProperty]:
-        pass
-
+    @_in_session
     def list_all(self) -> List[AdvertisedProperty]:
         select = self.properties.select()
         result = self.session.execute(select)
-        return result.fetchall()
+        return [self._row_to_obj(row) for row in result.fetchall()]
 
+    @_in_session
     def delete_all(self):
-        pass
+        delete = self.properties.delete()
+        self.session.execute(delete)
 
+    @_in_session
     def get_last_from(self, provider) -> Optional[AdvertisedProperty]:
-        pass
+        select = self.properties.select(
+            self.properties.c.provided_by == provider
+        ).order_by(
+            self.properties.c.entered.desc(),
+        )
+        result = self.session.execute(select)
+        return self._row_to_obj(result.fetchone())
 
+    @_in_session
     def list_ok(self) -> List[AdvertisedProperty]:
+        select = self.properties.select(self.properties.c.ok == True)
+        result = self.session.execute(select)
+        return [self._row_to_obj(row) for row in result.fetchall()]
         pass
 
     def init_session(self):

@@ -22,5 +22,6 @@ class TestSqliteRepository(TestRepository, TestCase):
         self.assertDictEqual(property_dict, expected_dict)
 
     def test_property_save(self):
-        # TODO hm?
-        pass
+        advertised_1 = create_advertised_1()
+        self.repo.save(advertised_1)
+        self.assertIsNotNone(advertised_1.property_id)
