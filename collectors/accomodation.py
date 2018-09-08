@@ -1,8 +1,7 @@
 from datetime import datetime
 from typing import Optional, Callable
 
-from collectors.scrapper import AccommodationScrapper, accomodation_generator, \
-    ParsedAccommodation
+from collectors.scrappers.scrapper import AccommodationScrapper, ParsedAccommodation
 from models.property import AdvertisedProperty
 
 
@@ -15,7 +14,7 @@ class AccommodationCollector:
         stop_func = self._create_stop_condition(
             last_from_provider, limit, entered)
 
-        for i, scrapped in enumerate(accomodation_generator(self.scrapper)):
+        for i, scrapped in enumerate(self.scrapper.generate_pages()):
             # TODO do something with scrapped
             if stop_func(i, scrapped):
                 break
@@ -26,18 +25,19 @@ class AccommodationCollector:
         if not any([last_from_provider, limit, entered]):
             raise ValueError('At least one condition is required!')
 
-
         conditions = []
 
         if last_from_provider:
             def equals_last_checked(_: int, scrapped: ParsedAccommodation):
                 return scrapped.url == last_from_provider.url
+
             conditions.append(equals_last_checked)
         if limit:
             conditions.append(lambda i, _: i == limit)
         if entered:
             def older_than(_: int, scrapped: ParsedAccommodation):
                 return scrapped.entered < entered
+
             conditions.append(older_than)
 
         return lambda i, scrapped: any(

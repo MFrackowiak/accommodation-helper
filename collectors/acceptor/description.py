@@ -3,7 +3,7 @@ from re import compile as re_compile, sub
 from typing import Optional, List, Dict, Tuple
 
 from collectors.acceptor.base import Acceptor, AcceptorResponse
-from collectors.scrapper import ParsedAccommodation
+from collectors.scrappers.scrapper import ParsedAccommodation
 
 
 @dataclass

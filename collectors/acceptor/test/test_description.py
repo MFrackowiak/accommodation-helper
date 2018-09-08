@@ -4,7 +4,7 @@ from unittest import TestCase
 from collectors.acceptor.base import AcceptorResponse
 from collectors.acceptor.description import DescriptionAcceptor, \
     DescriptionConfig
-from collectors.scrapper import ParsedAccommodation
+from collectors.scrappers.scrapper import ParsedAccommodation
 
 
 def mocked_found_property(description):

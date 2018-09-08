@@ -1,7 +1,7 @@
 from abc import abstractmethod, ABC
 from enum import Enum
 
-from collectors.scrapper import ParsedAccommodation
+from collectors.scrappers.scrapper import ParsedAccommodation
 
 
 class AcceptorResponse(Enum):

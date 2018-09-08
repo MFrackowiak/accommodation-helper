@@ -2,7 +2,7 @@ from dataclasses import field, dataclass
 from typing import Optional
 
 from collectors.acceptor.base import Acceptor, AcceptorResponse
-from collectors.scrapper import ParsedAccommodation
+from collectors.scrappers.scrapper import ParsedAccommodation
 from repositories.property import AdvertisedPropertyIRepository
 
 
