@@ -7,7 +7,7 @@ from sqlalchemy import DateTime, String, Integer, Column, Table, MetaData, \
 from sqlalchemy.engine import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from models.property import AdvertisedProperty
+from models.advertised_property import AdvertisedProperty
 from repositories.property import AdvertisedPropertyIRepository
 
 
@@ -60,7 +60,6 @@ class SqlAdvertisedPropertyRepository(AdvertisedPropertyIRepository):
             Column('entered', DateTime),
             Column('ok', Boolean, default=False),
             Column('row', Integer, nullable=True),
-            Column('commute', Integer, default=0),
             Column('flagged', Boolean, default=False),
             Column('sent_email', Boolean, default=False),
             sqlite_autoincrement=True)

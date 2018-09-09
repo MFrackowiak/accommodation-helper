@@ -1,6 +1,6 @@
 from abc import abstractmethod, ABC
 
-from collectors.scrappers.scrapper import ParsedAccommodation
+from collectors.scrappers.base import ParsedAccommodation
 
 
 class CrawlingReporter(ABC):

@@ -2,7 +2,7 @@ from collections import OrderedDict
 from dataclasses import asdict
 from typing import List, Dict, Optional
 
-from models.property import AdvertisedProperty
+from models.advertised_property import AdvertisedProperty
 from repositories.property import AdvertisedPropertyIRepository
 
 

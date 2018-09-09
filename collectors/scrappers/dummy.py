@@ -1,6 +1,6 @@
 from typing import List
 
-from collectors.scrappers.scrapper import AccommodationScrapper, \
+from collectors.scrappers.base import AccommodationScrapper, \
     ParsedAccommodation
 
 

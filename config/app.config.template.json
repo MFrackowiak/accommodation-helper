@@ -1,0 +1,43 @@
+{
+  "collector": {
+    "acceptors": [
+      {
+        "cls": "collectors.acceptor.price.PriceCheckAcceptor",
+        "config": {
+          "accept_max": 1600,
+          "verify_max": 1900
+        }
+      },
+      {
+        "cls": "collectors.acceptor.duplicate.DuplicateAcceptor",
+        "config": {
+          "cut_off_threshold": 0.5
+        }
+      },
+      {
+        "cls": "collectors.acceptor.description.DescriptionAcceptor",
+        "config": {
+
+        }
+      },
+      {
+        "cls": "collectors.acceptor.commute.CommuteAcceptor",
+        "config": {
+          "api_cls": "collectors.api.commute.dublin_postcode.DublinPostcodeCommuteAPI",
+          "max_commute": 60,
+          "max_verify": 80,
+          "verify_unknown": true,
+          "check_to": "Heather Road, Sandyford Business Park, Dublin 18"
+        }
+      }
+    ]
+  },
+  "dublin-zip-commute-api": {
+    "1": 50,
+    "2": 60,
+    "8": 40,
+    "6": 40,
+    "6w": 50,
+    "18": 20,
+  }
+}

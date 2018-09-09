@@ -13,6 +13,5 @@ class AdvertisedProperty:
     ok: bool
     property_id: Optional[int] = field(default=None)
     row: Optional[int] = field(default=None)
-    commute: int = field(default=0)
     flagged: bool = field(default=False)
     sent_email: bool = field(default=False)

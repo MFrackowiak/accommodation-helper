@@ -3,7 +3,7 @@ from enum import Enum
 from typing import Optional, List
 
 from collectors.acceptor.base import Acceptor, AcceptorResponse
-from collectors.scrappers.scrapper import ParsedAccommodation
+from collectors.scrappers.base import ParsedAccommodation
 from repositories.property import AdvertisedPropertyIRepository
 
 

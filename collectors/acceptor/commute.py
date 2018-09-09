@@ -3,7 +3,7 @@ from typing import Optional
 
 from collectors.acceptor.base import Acceptor, AcceptorResponse
 from collectors.api.commute.base import CommuteAPI, CommuteRequest
-from collectors.scrappers.scrapper import ParsedAccommodation
+from collectors.scrappers.base import ParsedAccommodation
 from config.config import application_config
 from utils.dynamic_loading import import_string
 

@@ -3,7 +3,7 @@ from unittest import TestCase
 
 from collectors.acceptor.base import AcceptorResponse
 from collectors.acceptor.price import PriceCheckAcceptor, PriceCheckConfig
-from collectors.scrappers.scrapper import ParsedAccommodation
+from collectors.scrappers.base import ParsedAccommodation
 
 
 def mock_accommodation(price: int) -> ParsedAccommodation:

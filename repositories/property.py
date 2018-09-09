@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional
 
-from models.property import AdvertisedProperty
+from models.advertised_property import AdvertisedProperty
 
 
 class AdvertisedPropertyIRepository(ABC):

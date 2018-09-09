@@ -119,3 +119,5 @@ pyvenv.cfg
 pip-selfcheck.json
 
 .idea
+app.config.json
+*.db

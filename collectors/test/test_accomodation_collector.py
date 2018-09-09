@@ -3,8 +3,8 @@ from unittest import TestCase
 
 from collectors.accomodation import AccommodationCollector
 from collectors.scrappers.dummy import DummyAccommodationScrapper
-from collectors.scrappers.scrapper import ParsedAccommodation
-from models.property import AdvertisedProperty
+from collectors.scrappers.base import ParsedAccommodation
+from models.advertised_property import AdvertisedProperty
 
 
 def mock_parsed_accomodation(
@@ -26,7 +26,6 @@ def mock_advertised(url):
         price=1200,
         provided_by='test',
         entered=datetime(2018, 9, 1, 19, 32, 10),
-        commute=20,
         flagged=False,
         sent_email=True,
         ok=True,

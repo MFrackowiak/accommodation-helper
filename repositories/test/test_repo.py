@@ -1,7 +1,7 @@
 from copy import deepcopy
 from datetime import datetime
 
-from models.property import AdvertisedProperty
+from models.advertised_property import AdvertisedProperty
 
 
 def create_advertised_1():
@@ -11,7 +11,6 @@ def create_advertised_1():
         price=1200,
         provided_by='rent',
         entered=datetime(2018, 9, 1, 19, 32, 10),
-        commute=20,
         flagged=False,
         sent_email=True,
         ok=True,
@@ -25,7 +24,6 @@ advertised_1_dict = dict(
     price=1200,
     provided_by='rent',
     entered=datetime(2018, 9, 1, 19, 32, 10),
-    commute=20,
     flagged=False,
     sent_email=True,
     ok=True,
@@ -40,7 +38,6 @@ def create_advertised_2():
         price=1400,
         provided_by='rent',
         entered=datetime(2018, 9, 1, 19, 32, 45),
-        commute=20,
         flagged=False,
         sent_email=True,
         ok=True,
@@ -54,7 +51,6 @@ def create_advertised_3():
         price=1400,
         provided_by='let',
         entered=datetime(2018, 9, 2, 18, 32, 10),
-        commute=20,
         flagged=True,
         sent_email=True,
         ok=True,
@@ -68,7 +64,6 @@ def create_advertised_4():
         price=1200,
         provided_by='let',
         entered=datetime(2017, 9, 1, 19, 32, 10),
-        commute=20,
         flagged=False,
         sent_email=False,
         ok=True,
@@ -82,7 +77,6 @@ def create_advertised_5():
         price=1200,
         provided_by='daft',
         entered=datetime(2018, 9, 1, 19, 32, 10),
-        commute=20,
         flagged=True,
         sent_email=False,
         ok=False,
