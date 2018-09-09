@@ -4,7 +4,7 @@ from typing import List, Optional
 from models.advertised_property import AdvertisedProperty
 
 
-class AdvertisedPropertyIRepository(ABC):
+class AdvertisedPropertyRepository(ABC):
     @abstractmethod
     def save(self, advertised_property: AdvertisedProperty):
         pass

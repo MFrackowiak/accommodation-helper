@@ -3,10 +3,10 @@ from dataclasses import asdict
 from typing import List, Dict, Optional
 
 from models.advertised_property import AdvertisedProperty
-from repositories.property import AdvertisedPropertyIRepository
+from repositories.base import AdvertisedPropertyRepository
 
 
-class InMemoryAdvertisedPropertyRepository(AdvertisedPropertyIRepository):
+class InMemoryAdvertisedPropertyRepository(AdvertisedPropertyRepository):
     _repo: Dict[int, Dict] = OrderedDict()
     _last_id = 0
 

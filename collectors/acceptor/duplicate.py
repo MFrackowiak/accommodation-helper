@@ -4,7 +4,7 @@ from typing import Optional, List
 
 from collectors.acceptor.base import Acceptor, AcceptorResponse
 from collectors.scrappers.base import ParsedAccommodation
-from repositories.property import AdvertisedPropertyIRepository
+from repositories.base import AdvertisedPropertyRepository
 
 
 @dataclass
@@ -27,7 +27,7 @@ class DuplicateAcceptor(Acceptor):
         looked_for: str
         similar_urls: List[str] = field(default=())
 
-    def __init__(self, repository: AdvertisedPropertyIRepository,
+    def __init__(self, repository: AdvertisedPropertyRepository,
                  config: Optional[DuplicateConfig], **kwargs):
         self.repository = repository
         self.config = config or DuplicateConfig(**kwargs)

@@ -7,7 +7,7 @@ from collectors.scrappers.base import AccommodationScrapper, \
     ParsedAccommodation
 from models.advertised_property import AdvertisedProperty
 from config.config import application_config
-from repositories.property import AdvertisedPropertyIRepository
+from repositories.base import AdvertisedPropertyRepository
 from utils.dynamic_loading import import_string
 from reporting.base import CrawlingReporter
 
@@ -29,7 +29,7 @@ class AcceptorsDecision:
 
 class AccommodationCollector:
     def __init__(self, scrapper: AccommodationScrapper,
-                 repository: AdvertisedPropertyIRepository,
+                 repository: AdvertisedPropertyRepository,
                  reporter: CrawlingReporter):
         self.scrapper: AccommodationScrapper = scrapper
         self.reporter: CrawlingReporter = reporter

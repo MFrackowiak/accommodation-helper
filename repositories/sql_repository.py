@@ -8,7 +8,7 @@ from sqlalchemy.engine import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from models.advertised_property import AdvertisedProperty
-from repositories.property import AdvertisedPropertyIRepository
+from repositories.base import AdvertisedPropertyRepository
 
 
 def _in_session(func) -> Callable:
@@ -33,7 +33,7 @@ def _in_session(func) -> Callable:
     return session_wrapper
 
 
-class SqlAdvertisedPropertyRepository(AdvertisedPropertyIRepository):
+class SqlAdvertisedPropertyRepository(AdvertisedPropertyRepository):
     def __init__(self, db_name, auto_commit=True):
         self.db_name = db_name
         self.auto_commit = auto_commit
