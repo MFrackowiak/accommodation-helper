@@ -14,6 +14,8 @@ class PriceCheckConfig:
 
 
 class PriceCheckAcceptor(Acceptor):
+    name = 'PriceAcceptor'
+
     def __init__(self, config: Optional[PriceCheckConfig] = None,
                  **kwargs):
         self.config = config or PriceCheckConfig(**kwargs)

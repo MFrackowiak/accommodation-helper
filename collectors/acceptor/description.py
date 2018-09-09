@@ -21,6 +21,8 @@ class ParsedDescriptionConfig:
 
 
 class DescriptionAcceptor(Acceptor):
+    name = 'DescriptionTextAcceptor'
+
     def __init__(self, config: Optional[DescriptionConfig], **kwargs):
         self.config = config or DescriptionConfig(**kwargs)
 

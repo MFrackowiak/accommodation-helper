@@ -13,6 +13,9 @@ class DuplicateConfig:
 
 
 class DuplicateAcceptor(Acceptor):
+    requires_repository = True
+    name = 'DuplicateAcceptor'
+
     def __init__(self, repository: AdvertisedPropertyIRepository,
                  config: Optional[DuplicateConfig], **kwargs):
         self.repository = repository

@@ -12,6 +12,9 @@ class AcceptorResponse(Enum):
 
 
 class Acceptor(ABC):
+    requires_repository = False
+    name = 'BaseAbstractAcceptor'
+
     @abstractmethod
     def is_ok(self, found_property: ParsedAccommodation) -> AcceptorResponse:
         pass

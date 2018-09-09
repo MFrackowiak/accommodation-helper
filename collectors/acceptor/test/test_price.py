@@ -26,6 +26,18 @@ class PriceAcceptorTestCase(TestCase):
         self.assertEqual(acceptor.is_ok(mock_accommodation(10)),
                          AcceptorResponse.ACCEPT)
 
+    def test_only_one(self):
+        acceptor = PriceCheckAcceptor(PriceCheckConfig(accept_max=10))
+
+        self.assertEqual(acceptor.is_ok(mock_accommodation(5)),
+                         AcceptorResponse.ACCEPT)
+        self.assertEqual(acceptor.is_ok(mock_accommodation(0)),
+                         AcceptorResponse.ACCEPT)
+        self.assertEqual(acceptor.is_ok(mock_accommodation(10)),
+                         AcceptorResponse.ACCEPT)
+        self.assertEqual(acceptor.is_ok(mock_accommodation(12)),
+                         AcceptorResponse.REJECT)
+
     def test_not_in_accept(self):
         acceptor = PriceCheckAcceptor(PriceCheckConfig(accept_min=0,
                                                        accept_max=2))

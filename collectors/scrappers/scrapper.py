@@ -23,7 +23,6 @@ class AccommodationScrapper(ABC):
     def read_from_page(self) -> List[ParsedAccommodation]:
         pass
 
-    @abstractmethod
     def generate_pages(self):
         while True:
             for advertised_property in self.read_from_page():
