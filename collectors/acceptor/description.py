@@ -24,12 +24,13 @@ class DescriptionAcceptor(Acceptor):
     name = 'DescriptionTextAcceptor'
 
     def __init__(self, config: Optional[DescriptionConfig], **kwargs):
-        self.config = config or DescriptionConfig(**kwargs)
+        self.config: DescriptionConfig = config or DescriptionConfig(**kwargs)
 
         if not (self.config.reject_if_found or self.config.verify_if_found):
             raise ValueError('Improperly Configured!')
 
-        self._parsed_config = self._parse_config()
+        self._parsed_config: ParsedDescriptionConfig = self._parse_config()
+        self.found_rules: List[str] = []
 
     def _parse_config(self) -> ParsedDescriptionConfig:
         return ParsedDescriptionConfig(
@@ -74,15 +75,30 @@ class DescriptionAcceptor(Acceptor):
 
     def _check_regexps_and_strings(
             self, cleaned, tokens, regexps, strings) -> bool:
-        test_regexps = any(map(lambda r: r.search(cleaned), regexps))
+        test_regexps = any(
+            map(lambda r: self._search_for_regexp(r, cleaned), regexps))
         test_strings = any(
-            map(lambda s: self._is_sublist(s, tokens), strings))
+            map(lambda s: self._search_for_tokens(s, tokens), strings))
         return test_regexps or test_strings
+
+    def _search_for_regexp(self, regexp, cleaned):
+        if regexp.search(cleaned):
+            self.found_rules.append(regexp)
+            return True
+        return False
+
+    def _search_for_tokens(self, string, tokens):
+        if self._is_sublist(string, tokens):
+            self.found_rules.append(string)
+            return True
+        return False
 
     def is_ok(self,
               found_property: ParsedAccommodation) -> AcceptorResponse:
         cleaned_description = self._simple_clean(found_property.description)
         token_description = self._simple_tokenize(cleaned_description)
+
+        self.found_rules = []
 
         if self._check_regexps_and_strings(
                 cleaned_description, token_description,
@@ -97,3 +113,7 @@ class DescriptionAcceptor(Acceptor):
         ):
             return AcceptorResponse.VERIFY
         return AcceptorResponse.ACCEPT
+
+    def provide_reason(self):
+        return f'The description of the property violated following rules :' \
+               f'{";".join(self.found_rules).}'

@@ -26,6 +26,7 @@ class CommuteAcceptor(Acceptor):
         self.config = config or CommuteConfig(**kwargs)
         self.api: CommuteAPI = import_string(
             self.config.api_cls)(application_config)
+        self.last_commute = None
 
     def is_ok(self, found_property: ParsedAccommodation) -> AcceptorResponse:
         request = CommuteRequest(
@@ -34,12 +35,19 @@ class CommuteAcceptor(Acceptor):
             clean_from=self.config.allow_normalize_from,
             clean_to=self.config.allow_normalize_to,
         )
-        commute_time = self.api.check_commute_time(request)
-        if commute_time is None:
+        self.last_commute = self.api.check_commute_time(request)
+        if self.last_commute is None:
             return AcceptorResponse.VERIFY if self.config.verify_unknown \
                 else AcceptorResponse.REJECT
-        elif commute_time <= self.config.max_commute:
+        elif self.last_commute <= self.config.max_commute:
             return AcceptorResponse.ACCEPT
-        elif self.config.max_verify and commute_time <= self.config.max_verify:
+        elif self.config.max_verify and \
+                self.last_commute <= self.config.max_verify:
             return AcceptorResponse.VERIFY
         return AcceptorResponse.REJECT
+
+    def provide_reason(self):
+        return f'The {self.config.api_cls} return commute time ' \
+               f'{self.last_commute}; max commute time to accept is ' \
+               f'{self.config.max_commute} and to verify is ' \
+               f'{self.config.max_verify}'

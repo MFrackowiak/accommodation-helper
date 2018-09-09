@@ -18,3 +18,7 @@ class Acceptor(ABC):
     @abstractmethod
     def is_ok(self, found_property: ParsedAccommodation) -> AcceptorResponse:
         pass
+
+    @abstractmethod
+    def provide_reason(self) -> str:
+        pass
