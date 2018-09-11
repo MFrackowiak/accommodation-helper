@@ -73,3 +73,36 @@ class PriceAcceptorTestCase(TestCase):
                          AcceptorResponse.REJECT)
         self.assertEqual(acceptor.is_ok(mock_accommodation(16)),
                          AcceptorResponse.REJECT)
+
+    def test_last_value_is_set(self):
+        acceptor = PriceCheckAcceptor(
+            PriceCheckConfig(accept_min=0, accept_max=10,
+                             verify_min=-5, verify_max=15))
+        acceptor.is_ok(mock_accommodation(5))
+        self.assertEqual(acceptor.last_checked_value, 5)
+        acceptor.is_ok(mock_accommodation(-6))
+        self.assertEqual(acceptor.last_checked_value, -6)
+        acceptor.is_ok(mock_accommodation(18))
+        self.assertEqual(acceptor.last_checked_value, 18)
+        acceptor.is_ok(mock_accommodation(12))
+        self.assertEqual(acceptor.last_checked_value, 12)
+
+    def test_provide_reason(self):
+        acceptor = PriceCheckAcceptor(
+            PriceCheckConfig(accept_min=0, accept_max=10,
+                             verify_min=-5, verify_max=15))
+        acceptor.is_ok(mock_accommodation(42))
+        self.assertEqual(
+            acceptor.provide_reason(),
+            'Price may not fit in accept range: 0 to 10 or verify range: -5 to '
+            '15, provided price: 42.'
+        )
+
+        acceptor = PriceCheckAcceptor(
+            PriceCheckConfig(accept_max=8))
+        acceptor.is_ok(mock_accommodation(42))
+        self.assertEqual(
+            acceptor.provide_reason(),
+            'Price may not fit in accept range: n/a to 8 or verify range: n/a '
+            'to n/a, provided price: 42.'
+        )

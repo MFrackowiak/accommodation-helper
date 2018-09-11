@@ -102,3 +102,23 @@ class DescriptionAcceptorTestCase(TestCase):
             'Really nice. No pets allowed. Shared bathroom.'
         ))
         self.assertEqual(response, AcceptorResponse.REJECT)
+
+    def test_founded_rules_are_saved(self):
+        self.acceptor.is_ok(mocked_found_property(
+            'shared something in fact is.'
+        ))
+        self.assertEqual(self.acceptor.found_rules, ['shared'])
+        self.acceptor.is_ok(mocked_found_property(
+            'dogs are not allowed'
+        ))
+        self.assertEqual(self.acceptor.found_rules,
+                         ['(dog|pet)s? (is|are) not allowed'])
+        self.acceptor.is_ok(mocked_found_property(
+            'no dogs allowed. only for single person.'
+        ))
+        self.assertEqual(self.acceptor.found_rules,
+                         ['no (dog|pet)s? allowed', 'single person'])
+        self.acceptor.is_ok(mocked_found_property(
+            'Perfect property. Come and live here.'
+        ))
+        self.assertEqual(self.acceptor.found_rules, [])

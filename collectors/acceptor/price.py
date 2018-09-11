@@ -25,6 +25,7 @@ class PriceCheckAcceptor(Acceptor):
             raise ValueError('Improperly configured!')
 
     def is_ok(self, found_property: ParsedAccommodation) -> AcceptorResponse:
+        self.last_checked_value = found_property.price
         if self._in_range(found_property.price, self.config.accept_min,
                           self.config.accept_max):
             return AcceptorResponse.ACCEPT
@@ -33,15 +34,20 @@ class PriceCheckAcceptor(Acceptor):
             return AcceptorResponse.VERIFY
         return AcceptorResponse.REJECT
 
-    def provide_reason(self) -> str:
-        return f'Price did not fit in accept range: ' \
-               f'{self.config.accept_min or "n/a"} to' \
-               f' {self.config.accept_max or "n/a"} or verify range: ' \
-               f'{self.config.verify_min or 0} to' \
-               f' {self.config.verify_max or "n/a"}, provided price: ' \
-               f'{self.last_checked_value or "n/a"}.'
+    @classmethod
+    def _na_if_none(cls, value):
+        return 'n/a' if value is None else value
 
-    def _in_range(self, value: int, min_val: Optional[int],
+    def provide_reason(self) -> str:
+        return f'Price may not fit in accept range: ' \
+               f'{self._na_if_none(self.config.accept_min)} to' \
+               f' {self._na_if_none(self.config.accept_max)} or verify range:' \
+               f' {self._na_if_none(self.config.verify_min)} to' \
+               f' {self._na_if_none(self.config.verify_max)}, provided price:' \
+               f' {self._na_if_none(self.last_checked_value)}.'
+
+    @staticmethod
+    def _in_range(value: int, min_val: Optional[int],
                   max_val: Optional[int]) -> bool:
         if min_val is None and max_val is None:
             return False

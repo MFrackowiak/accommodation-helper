@@ -74,22 +74,22 @@ class DescriptionAcceptor(Acceptor):
         return strings, regexps
 
     def _check_regexps_and_strings(
-            self, cleaned, tokens, regexps, strings) -> bool:
+            self, cleaned, tokens, regexps, searched_tokens) -> bool:
         test_regexps = any(
             map(lambda r: self._search_for_regexp(r, cleaned), regexps))
         test_strings = any(
-            map(lambda s: self._search_for_tokens(s, tokens), strings))
+            map(lambda t: self._search_for_tokens(t, tokens), searched_tokens))
         return test_regexps or test_strings
 
     def _search_for_regexp(self, regexp, cleaned):
         if regexp.search(cleaned):
-            self.found_rules.append(regexp)
+            self.found_rules.append(regexp.pattern)
             return True
         return False
 
-    def _search_for_tokens(self, string, tokens):
-        if self._is_sublist(string, tokens):
-            self.found_rules.append(string)
+    def _search_for_tokens(self, searched_tokens, tokens):
+        if self._is_sublist(searched_tokens, tokens):
+            self.found_rules.append(' '.join(searched_tokens))
             return True
         return False
 
@@ -115,5 +115,6 @@ class DescriptionAcceptor(Acceptor):
         return AcceptorResponse.ACCEPT
 
     def provide_reason(self):
+        print(self.found_rules)
         return f'The description of the property violated following rules :' \
-               f'{";".join(self.found_rules).}'
+               f'{";".join(self.found_rules)}.'
