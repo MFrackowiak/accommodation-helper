@@ -1,6 +1,7 @@
 from dataclasses import asdict
 from functools import wraps
 from typing import List, Optional, Callable, Dict
+from config.config import application_config
 
 from sqlalchemy import DateTime, String, Integer, Column, Table, MetaData, \
     Boolean
@@ -43,7 +44,7 @@ class SqlAdvertisedPropertyRepository(AdvertisedPropertyRepository):
         self.engine = create_engine(
             f'postgresql+psycopg2://dublin:dublin@localhost/dublin',
             encoding='utf-8',
-            echo=True)
+            echo=application_config.echo_db)
         self.session_maker = sessionmaker(bind=self.engine)
         self._init_db()
 

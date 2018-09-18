@@ -17,7 +17,15 @@
       {
         "cls": "collectors.acceptor.description.DescriptionAcceptor",
         "config": {
-
+          "reject_if_found": [
+            {"phrase": "single person", "is_reg": false},
+            {"phrase": "no (dog|pet)s? (are|is)? allowed", "is_reg": true},
+            {"phrase": "no (dog|pet)s? allowed", "is_reg": true},
+            {"phrase": "(dog|pet)s? (is|are) not allowed", "is_reg": true}
+          ],
+          "verify_if_found": [
+            {"phrase": "shared", "is_reg": false}
+          ]
         }
       },
       {
@@ -38,7 +46,16 @@
     "8": 40,
     "6": 40,
     "6w": 50,
-    "18": 20,
+    "18": 20
+  },
+  "google-commute-api": {
+    "api-key": "dummy-key",
+    "region": "ie",
+    "mode": "transit"
+  },
+  "google-reporting-api": {
+  },
+  "google-migration-api": {
   },
   "echo_db": false
 }
