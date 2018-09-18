@@ -28,7 +28,7 @@ class DuplicateAcceptor(Acceptor):
         similar_urls: List[str] = field(default=())
 
     def __init__(self, repository: AdvertisedPropertyRepository,
-                 config: Optional[DuplicateConfig], **kwargs):
+                 config: Optional[DuplicateConfig] = None, **kwargs):
         self.repository = repository
         self.config = config or DuplicateConfig(**kwargs)
         self.last_result: Optional[self.LastFinding] = None

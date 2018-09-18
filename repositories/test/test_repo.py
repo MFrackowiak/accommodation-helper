@@ -83,7 +83,7 @@ def create_advertised_5():
     )
 
 
-class TestRepository(object):
+class BaseTestRepository(object):
     threshold = 0.5
 
     def test_property_to_dict(self):

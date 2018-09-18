@@ -1,12 +1,12 @@
 from copy import deepcopy
 from unittest import TestCase
 
-from repositories.test.test_repo import TestRepository, create_advertised_1, \
+from .test_repo import BaseTestRepository, create_advertised_1, \
     advertised_1_dict
 from repositories.sql_repository import SqlAdvertisedPropertyRepository
 
 
-class TestSqliteRepository(TestRepository, TestCase):
+class TestSqliteRepository(BaseTestRepository, TestCase):
     def setUp(self):
         self.repo = SqlAdvertisedPropertyRepository('test-db.db', False)
         self.default = {}

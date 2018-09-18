@@ -23,7 +23,7 @@ class ParsedDescriptionConfig:
 class DescriptionAcceptor(Acceptor):
     name = 'DescriptionTextAcceptor'
 
-    def __init__(self, config: Optional[DescriptionConfig], **kwargs):
+    def __init__(self, config: Optional[DescriptionConfig] = None, **kwargs):
         self.config: DescriptionConfig = config or DescriptionConfig(**kwargs)
 
         if not (self.config.reject_if_found or self.config.verify_if_found):

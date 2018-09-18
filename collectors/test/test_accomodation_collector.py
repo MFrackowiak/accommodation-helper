@@ -5,6 +5,9 @@ from collectors.accomodation import AccommodationCollector
 from collectors.scrappers.dummy import DummyAccommodationScrapper
 from collectors.scrappers.base import ParsedAccommodation
 from models.advertised_property import AdvertisedProperty
+from reporting.json_file import JsonCrawlingReporter, JsonCrawlingReporterConfig
+from repositories.in_memory_repository import \
+    InMemoryAdvertisedPropertyRepository
 
 
 def mock_parsed_accomodation(
@@ -71,7 +74,12 @@ accomodations = [
 
 class AccomodationCollectorStopTestCase(TestCase):
     def setUp(self):
-        self.collector = AccommodationCollector(DummyAccommodationScrapper([]))
+        self.collector = AccommodationCollector(
+            DummyAccommodationScrapper([]),
+            InMemoryAdvertisedPropertyRepository(),
+            JsonCrawlingReporter(
+                JsonCrawlingReporterConfig('test.json', False)),
+        )
 
     def test_stop_limit(self):
         stop_func = self.collector._create_stop_condition(limit=5)

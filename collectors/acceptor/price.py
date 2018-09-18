@@ -21,7 +21,7 @@ class PriceCheckAcceptor(Acceptor):
         self.config = config or PriceCheckConfig(**kwargs)
         self.last_checked_value = ''
 
-        if not any(filter(lambda c: c is not None, astuple(config))):
+        if not any(filter(lambda c: c is not None, astuple(self.config))):
             raise ValueError('Improperly configured!')
 
     def is_ok(self, found_property: ParsedAccommodation) -> AcceptorResponse:
