@@ -4,7 +4,7 @@ from pytz import timezone
 
 
 class ConfigurationTimeParser(ABC):
-    def __init__(self, tz_name: str):
+    def __init__(self, tz_name: str = 'UTC'):
         self.tz_info = timezone(tz_name)
 
     @abstractmethod
