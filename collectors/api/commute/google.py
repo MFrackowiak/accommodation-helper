@@ -1,9 +1,12 @@
 from dataclasses import dataclass, field
 from typing import Dict
+
 from googlemaps.client import Client
 from googlemaps.directions import directions
 
 from collectors.api.commute.base import CommuteAPI, CommuteRequest
+from collectors.api.commute.time.simple import SimpleConfigurationTimeParser
+from utils.datetime_utils import timestamp_from_datetime
 
 
 @dataclass
@@ -13,6 +16,7 @@ class GoogleAPIConfig:
     mode: str = field(default='transit')
     arrival_time: str = field(default='now')
     parse_arrival_time: bool = field(default=False)
+    arrival_time_timezone: str = field(default='UTC')
 
 
 class GoogleCommuteAPI(CommuteAPI):
@@ -38,7 +42,11 @@ class GoogleCommuteAPI(CommuteAPI):
 
     def _get_times(self) -> Dict[str, str]:
         if self.config.parse_arrival_time:
-            pass
+            time_parser = SimpleConfigurationTimeParser(
+                self.config.arrival_time_timezone)
+            return {'arrival_time':
+                timestamp_from_datetime(
+                    time_parser.parse_time(self.config.arrival_time))}
         return {'arrival_time': self.config.arrival_time}
 
     def normalize_address(self, address: str) -> str:
